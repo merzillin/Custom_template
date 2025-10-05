@@ -5,8 +5,12 @@ import { LogOut, X, ChevronDown, ChevronRight, Settings } from "lucide-react";
 import logo from "../../assets/logo/Q.png";
 import btnLogo from "../../assets/logo/btn-logo.png";
 import profile from "../../assets/Profile.jpg";
-import { apiRoute } from "./navbarRoute";
-import type { ModuleRoute } from "../../types/auth";
+import type {
+  ModuleRoute,
+  ModuleRouteApiResponse,
+  RouteItemApiResponse,
+} from "../../types/auth";
+import AuthService from "../../api/auth/auth";
 
 const user = {
   name: "John Doe",
@@ -44,18 +48,23 @@ const Sidebar = () => {
     navigate("/login");
   };
 
-  const getModuleAndMenu = () => {
+  const getModuleAndMenu = async () => {
     try {
-      // assuming apiRoute as the value from api
+      const response = await AuthService.getModuleMenu();
+      const { data } = response;
+      if (!data.status) return;
+
       const filteredNavRoutes = NavRoutes.map((navRoute) => {
-        const apiRouteItem = apiRoute.find(
-          (apiRouteModule) => apiRouteModule.moduleKey === navRoute.moduleKey
+        const apiRouteItem = data.result.find(
+          (apiRouteModule: ModuleRouteApiResponse) =>
+            apiRouteModule.moduleKey === navRoute.moduleKey
         );
 
         if (apiRouteItem) {
           const filteredMenus = navRoute.menus.filter((menu) =>
             apiRouteItem.menus.some(
-              (apiMenu) => apiMenu.menuKey === menu.menuKey
+              (apiMenu: RouteItemApiResponse) =>
+                apiMenu.menuKey === menu.menuKey
             )
           );
 
@@ -78,12 +87,11 @@ const Sidebar = () => {
 
   useEffect(() => {
     setOpenModules(getInitialOpenModules());
-  }, [location.pathname]);
+  }, []);
 
   useEffect(() => {
     getModuleAndMenu();
   }, []);
-
   return (
     <>
       <button

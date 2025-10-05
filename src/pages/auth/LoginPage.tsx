@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthService from "../../api/auth/auth";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -16,10 +17,23 @@ export default function LoginPage() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent default form submission
     console.log("Submitted values:", formData); // Log the form data (could be sent to a server)
-    navigate("/home");
+    try {
+      const userPayload = {
+        username: formData.username,
+        password: formData.password,
+      };
+      const response = await AuthService.login(userPayload);
+      const { data } = response;
+      if (!data.status) return alert("login failed");
+      localStorage.setItem("accessToken", data.result.accessToken);
+      localStorage.setItem("refreshToken", data.result.refreshToken);
+      navigate("/home");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

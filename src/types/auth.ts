@@ -11,3 +11,20 @@ export interface ModuleRoute {
   moduleName: string;
   menus: RouteItem[];
 }
+
+export interface RouteItemApiResponse {
+  path: string;
+  name: string;
+  menuKey: string;
+}
+
+export interface ModuleRouteApiResponse {
+  moduleKey: string;
+  moduleName: string;
+  menus: RouteItemApiResponse[];
+}
+
+export type TLogin = {
+  username: string;
+  password: string;
+};
