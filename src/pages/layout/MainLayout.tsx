@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../../components/navbar/Navbar";
 
 export default function MainLayout() {
+  console.count("mainlayout");
   return (
     <div className="flex min-h-screen">
       <Sidebar />

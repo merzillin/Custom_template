@@ -1,6 +1,8 @@
+import type { JSX, LazyExoticComponent } from "react";
+
 export interface RouteItem {
   path: string;
-  component: React.ReactNode;
+  component: LazyExoticComponent<() => JSX.Element>;
   name: string;
   icon?: React.ReactNode;
   menuKey: string;

@@ -1,5 +1,6 @@
 import { PageCard } from "../../components/Card/PageCard";
 
-export const DashboardPage = () => {
+const DashboardPage = () => {
   return <PageCard title="Dashboard">Dashboard</PageCard>;
 };
+export default DashboardPage;
